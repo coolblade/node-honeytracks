@@ -150,7 +150,7 @@ req.honeyTracks.trackVirtualGoodsItemPurchase('sword',
 );
 ```
 
-#### req.honeyTracks.trackVirtualCurrencyChargeback
+#### trackVirtualCurrencyChargeback
 __https://docs.honeytracks.com/wiki/TrackVirtualCurrencyChargeback/PHP__  
 Tracks a chargeback of a virtual currency purchase, e.g. if a credit card transaction failed. The revenue and payout amounts have to be always positive.
 ```
