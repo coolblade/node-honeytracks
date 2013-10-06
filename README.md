@@ -12,11 +12,13 @@ Using the tracking needs a valid account at https://panel.honeytracks.com and th
 npm install honeytracks
 ```
 
+### require
 ```javascript
 var HoneyTracks = require('honeytracks');
 ```
 
-```Setup your honeytracks configuration
+### Setup your honeytracks configuration
+```javascript
 HoneyTracks.setup({
     ApiKey: 'YOUR_API_KEY',
     Language: 'en_GB',
@@ -24,9 +26,11 @@ HoneyTracks.setup({
     SecretKey: 'YOUR_SECRET_KEY'
 };
 ```
+
 For a full list of setup options please see the honeytracks docs at docs.honeytracks.com
 
-```Initialize honeytracks into your app life cycle
+### Initialize honeytracks into your app life cycle
+```javascript
 app.use(HoneyTracks.initialize(true));
 ```
 
