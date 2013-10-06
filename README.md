@@ -1,6 +1,6 @@
 # NodeJS Library for HoneyTracks
 
-Using the tracking needs a valid account at https://panel.honeytracks.com and the corresponding product Api- and SecretKey
+Using the tracking needs a valid account at https://panel.honeytracks.com and the corresponding product ApiKey and SecretKey
 
 **Author:** [coolblade](http://www.github.com/coolblade)
 
