@@ -1,0 +1,34 @@
+{
+  "author": {
+    "name": "Ever Adventure Ltd",
+    "email": "gregory@everadventure.com",
+    "url": "https://github.com/coolblade"
+  },
+  "name": "honeytracks",
+  "description": "HoneyTracks Game Analytics Tracking Client for Node.JS",
+  "keywords": [
+    "honeytracks",
+    "analytics",
+    "game analytics"
+  ],
+  "version": "0.1.0",
+  "homepage": "https://github.com/coolblade/honeytracks-node-sdk",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/coolblade/honeytracks-node-sdk.git"
+  },
+  "engines": {
+    "node": ">=0.6.9"
+  },
+  "dependencies": {
+    "request": "2.9.x",
+    "crypto": "0.0.3",
+    "guid": "0.0.10"
+  },
+  "devDependencies": {},
+  "optionalDependencies": {},
+  "main": "./honeytracks.js",
+  "scripts": {},
+  "_id": "honeytracks@0.99",
+  "_from": "honeytracks"
+}
