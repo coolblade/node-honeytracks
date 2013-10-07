@@ -19,8 +19,7 @@ module.exports = function (usesCookies, expireDays) {
         }
         
         res.on("finish", function() {
-            console.log('finish!')
-            honeyTracks.commit(function(){});
+            //honeyTracks.commit(function(){});
         });
         
         next();

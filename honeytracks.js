@@ -17,6 +17,7 @@ var HoneyTracks = (function() {
     var __HTTP_POST_QUEUE = [];
     var lastPOSTContent = null;
     var ignoredCustomers = [];
+    var isSending = false;
     
     defaultData = {
         'ApiKey': null,
@@ -40,13 +41,16 @@ var HoneyTracks = (function() {
 		'TRACKING_URL' : 'http://tracker.honeytracks.com/?ApiKey=%s&s=%s',
 		'SEND_IMMEDIATELY' : true,
 		'PACKETS_STORAGE_PATH' : null,
-		'NUMBER_OF_CALL_RETRIES': 3,
+		'NUMBER_OF_CALL_RETRIES': 1,
 		'DEBUG': false
 	};
     
     function HoneyTracksException() {
+        trace('1')
         var args = Array.prototype.slice.call(arguments);
+        trace('2')
         var NO_VALID_EXCEPTION_CODE = '%s is not a valid exception code';
+        trace('3')
         var exceptions = {
             '1': 'default data needs a valid value for key %s',
             '2': 'can\'t return a singleton instance of tracker library class, no default data was given and no instance exists',
@@ -57,20 +61,26 @@ var HoneyTracks = (function() {
             '7': 'UniqueCustomerClickToken is required data field when usesCookies is not set in initialize',
             '8': "can\'t open the url %s - %s"
         };
-        
+        trace('4')
         this.name = "HoneyTracksException";
-        
+        trace('5')
         var code = args[0].toString();
+        trace('6')
         if(exceptions[code]) this.message = exceptions[code];
         else {
+            trace('8')
             this.message = util.format(NO_VALID_EXCEPTION_CODE, code);
+            trace('9')
             return;
         }
-        
+        trace('10')
         if(args.length > 1) {
+            trace('11')
             if( Object.prototype.toString.call( args[1] ) !== '[object Array]') {
+                trace('12')
                 this.message = util.format.apply(null, [this.message].concat(args.slice(1)));
             } else if (args[1].length > 0) {
+                trace('13')
                 this.message = util.format.apply(null, [this.message].concat(args[1]));
             }
         }
@@ -238,8 +248,8 @@ var HoneyTracks = (function() {
 	 */
 	function trackLogin(data, cb) {
 	    if(arguments.length === 1){
-	        data = {};
 	        cb = arguments[0];
+	        data = {};
         }
 		track('User::Login', data, cb);
 	}
@@ -251,8 +261,8 @@ var HoneyTracks = (function() {
 	 */
 	function trackLogout(data, cb) {
 	    if(arguments.length === 1){
-	        data = {};
 	        cb = arguments[0];
+	        data = {};
         }
 		track('User::Logout', data, cb);
 	}
@@ -377,17 +387,17 @@ var HoneyTracks = (function() {
 	 */
 	function trackVirtualCurrencyPurchase(virtualCurrencyAmount, paymentType, revenue, revenueCurrency, payout, payoutCurrency, isFreeAction, data, cb) {
 	    if(arguments.length === 6){
+	        cb = arguments[5];
 	        payoutCurrency = null;
     	    isFreeAction = false;
             data = {};
-            cb = arguments[5];
         } else if(arguments.length === 7){
+            cb = arguments[6];
             isFreeAction = false;
             data = {};
-            cb = arguments[6];
         } else if(arguments.length === 8){
-            data = {};
             cb = arguments[7];
+            data = {};
         }
         if(isObject(virtualCurrencyAmount) && !data['VirtualCurrencyName'] && virtualCurrencyAmount['Name']) {
             data['VirtualCurrencyName'] = virtualCurrencyAmount['Name'];
@@ -419,12 +429,12 @@ var HoneyTracks = (function() {
 	 */
 	function trackVirtualCurrencyChargeback(virtualCurrencyAmount, paymentType, revenue, revenueCurrency, payout, payoutCurrency, data, cb) {
 	    if(arguments.length === 6){
+	        cb = arguments[5];
 	        payoutCurrency = null;
     	    data = {};
-    	    cb = arguments[5];
         } else if(arguments.length === 7){
-    	    data = {};
     	    cb = arguments[6];
+    	    data = {};
         }
         	    
         if(isObject(virtualCurrencyAmount) && !data['VirtualCurrencyName'] && virtualCurrencyAmount['Name']) {
@@ -456,23 +466,23 @@ var HoneyTracks = (function() {
 	 */
 	function trackVirtualGoodsFeaturePurchase(featureType, featureSubType, virtualCurrencyAmount, gameCurrency, quantity, isFreeAction, data, cb) {
         if(arguments.length === 4){
+            cb = arguments[3];
             gameCurrency = null;
     	    quantity = 1;
     	    isFreeAction = false;
             data = {};
-            cb = arguments[3];
         } else if(arguments.length === 5){
+    	    cb = arguments[4];
     	    quantity = 1;
     	    isFreeAction = false;
             data = {};
-            cb = arguments[4];
         } else if(arguments.length === 6){
+    	    cb = arguments[5];
     	    isFreeAction = false;
             data = {};
-            cb = arguments[5];
         } else if(arguments.length === 7){
-            data = {};
             cb = arguments[6];
+            data = {};
         }
         
         
@@ -508,23 +518,23 @@ var HoneyTracks = (function() {
 	 */
 	function trackVirtualGoodsItemPurchase(itemType, item, virtualCurrencyAmount, gameCurrency, quantity, isFreeAction, data, cb) {
 	    if(arguments.length === 4){
+            cb = arguments[3];
             gameCurrency = null;
     	    quantity = 1;
     	    isFreeAction = false;
             data = {};
-            cb = arguments[3];
         } else if(arguments.length === 5){
+    	    cb = arguments[4];
     	    quantity = 1;
     	    isFreeAction = false;
             data = {};
-            cb = arguments[4];
         } else if(arguments.length === 6){
+    	    cb = arguments[5];
     	    isFreeAction = false;
             data = {};
-            cb = arguments[5];
         } else if(arguments.length === 7){
-            data = {};
             cb = arguments[6];
+            data = {};
         }
 
         if(isObject(virtualCurrencyAmount) && !data['VirtualCurrencyName'] && virtualCurrencyAmount['Name']) {
@@ -555,8 +565,8 @@ var HoneyTracks = (function() {
 	 */
 	function trackLevelup(level, data, cb) {
 	    if(arguments.length === 2){
+	        cb = arguments[1];
             data = {};
-            cb = arguments[1];
         }
 		track('User::Levelup', mergeObjects({
 			'Value': level
@@ -572,26 +582,26 @@ var HoneyTracks = (function() {
 	 * @param int quantity
 	 * @param string featureThirdType whatever you want, the tree order is featureType->featureSubType->featureThirdType
 	 * @param array data for overwriting DefaultData values
-	 */
+	 */     
 	function trackFeatureUsage(featureType, featureSubType, featureSubSubType, gameCurrency, quantity, data, cb) {
 	    if(arguments.length === 3){
+            cb = arguments[2];
             featureSubSubType = null;
     	    gameCurrency = null;
     	    quantity = 1;
     	    data = {};
-            cb = arguments[2];
         } else if(arguments.length === 4){
+    	    cb = arguments[3];
     	    gameCurrency = null;
     	    quantity = 1;
     	    data = {};
-            cb = arguments[3];
         } else if(arguments.length === 5){
+    	    cb = arguments[4];
     	    quantity = 1;
     	    data = {};
-            cb = arguments[4];
         } else if(arguments.length === 6){
-    	    data = {};
             cb = arguments[5];
+    	    data = {};
         }
 	    
 		track('Feature::Usage::' + featureType + '::' + featureSubType, mergeObjects({
@@ -614,11 +624,11 @@ var HoneyTracks = (function() {
 	function trackViralityInvitation(inviteType, inviteMessageToken, quantity, data, cb) {
 	    if(arguments.length === 3){
             quantity = 1;
-    	    data = {};
             cb = arguments[2];
-        } else if(arguments.length === 4){
     	    data = {};
+        } else if(arguments.length === 4){
             cb = arguments[3];
+    	    data = {};
         }
         
 		track('Virality::Invitation::' + inviteType, mergeObjects({
@@ -639,8 +649,8 @@ var HoneyTracks = (function() {
 	 */
 	function trackViralityInviteAcceptance(inviteType, inviteMessageToken, sourceUniqueCustomerIdentifier, data, cb) {
 	    if(arguments.length === 4){
+    	    cb = arguments[3];
     	    data = {};
-            cb = arguments[3];
         }
 		track('Virality::Invitation::Acceptance::' + inviteType, mergeObjects({
 			'InviteType': inviteType,
@@ -657,8 +667,8 @@ var HoneyTracks = (function() {
 	 */
 	function trackUserGender(gender, data, cb) {
 	    if(arguments.length === 2){
+	        cb = arguments[1];
     	    data = {};
-            cb = arguments[1];
         }
 		track('User::Profile', mergeObjects({
 			'Type': 'Gender',
@@ -674,8 +684,8 @@ var HoneyTracks = (function() {
 	 */
 	function trackUserBirthyear(birthyear, data, cb) {
 	    if(arguments.length === 2){
+	        cb = arguments[1];
     	    data = {};
-            cb = arguments[1];
         }
 		track('User::Profile', mergeObjects({
 			'Type': 'Birthyear',
@@ -691,8 +701,8 @@ var HoneyTracks = (function() {
 	 */
 	function trackUserCustomStaticClassification(customStaticClassification, data, cb) {
 	    if(arguments.length === 2){
+	        cb = arguments[1];
     	    data = {};
-            cb = arguments[1];
         }
 		track('User::Profile', mergeObjects({
 				'Type': 'CustomStaticClassification',
@@ -768,24 +778,26 @@ var HoneyTracks = (function() {
 				throw new HoneyTracksException(5, key, JSON.stringify(data));
 			}
 	    }
-	    
 	    if(configuration['DEBUG']) console.log("HTDEBUG: addHTTPTrackingCall:" + JSON.stringify(data));
-	    
 		/**
 		 * avoid adding events to the http queue if the event user is blocked for events
 		 */
 		var shasum = crypto.createHash('sha1');
 		shasum.update(data['Space'] + '::' + data['UniqueCustomerIdentifier']);
 				
-		if(ignoredCustomers.length > 0 && ignoredCustomers[shasum.digest('hex')]);
-			cb(false);
-
+		if(ignoredCustomers.length > 0 && ignoredCustomers[shasum.digest('hex')]){
+		    cb(false);
+		    return;
+		}
+		
 		__HTTP_POST_QUEUE.push(data);
 
 		if(__HTTP_POST_QUEUE.length >= 9) {
 			executeHTTPQueue(function(success){
 			    cb(success);
 			});
+        } else {
+            cb(true);
         }
 	}
 	
@@ -795,9 +807,9 @@ var HoneyTracks = (function() {
 	function executeHTTPQueue(cb) {
 	    if(configuration['DEBUG']) console.log("HTDEBUG: __HTTP_POST_QUEUE.length: " + __HTTP_POST_QUEUE.length);
 	    
-		if(__HTTP_POST_QUEUE.length > 0) {
+		if(__HTTP_POST_QUEUE.length > 0 && !isSending) {
 			var callTry = 0;
-			
+			isSending = true;
 			function makeCall(cb){
 			    try {
 					callTry++;
@@ -823,17 +835,21 @@ var HoneyTracks = (function() {
 				}
 			}
 			makeCall(function(transportOk){
+			    isSending = false;
 			    if(transportOk === false) {
     				savePackets(lastPOSTContent, function(){
     				    __HTTP_POST_QUEUE = [];
             			cb(transportOk);
+            			return;
     				});
 				}
+				__HTTP_POST_QUEUE = [];
 				cb(transportOk);
 				return;
 			});
-		}
-		cb(false);
+		} else {
+		    cb(false);
+		}		
 	}
 	
 	function isWritable(path) {
@@ -932,7 +948,6 @@ var HoneyTracks = (function() {
 		}
 
 		lastPOSTContent = postContent.join('&');
-		console.log('tracksURL: ' + tracksURL + ' lastPOSTContent ' + lastPOSTContent)
 		if(configuration['SEND_IMMEDIATELY'] !== true && configuration['PACKETS_STORAGE_PATH'] == null) {
 			savePackets(lastPOSTContent, function(success){
 			    cb(success?'ok':'failed');
